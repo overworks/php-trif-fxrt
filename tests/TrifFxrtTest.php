@@ -21,7 +21,7 @@ class TrifFxrtTest extends TestCase
 
     public function testRetrieveTrifFxrtInfo(): void
     {
-        $result = $this->trifFxrt->getRetrieveTrifFxrtInfo('202401118', 1);
+        $result = $this->trifFxrt->getRetrieveTrifFxrtInfo('20240118', 1);
         $this->assertIsArray($result);
     }
 }

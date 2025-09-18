@@ -2,16 +2,13 @@
 
 namespace Minhyung\TrifFxrt;
 
-use GuzzleHttp\Client;
-
 class TrifFxrt
 {
     const ENDPOINT = 'http://apis.data.go.kr/1220000/retrieveTrifFxrtInfo';
 
-    private ?Client $client = null;
-
-    public function __construct(private string $serviceKey)
-    {
+    public function __construct(
+        private readonly string $serviceKey
+    ) {
         //
     }
 
@@ -23,15 +20,27 @@ class TrifFxrt
      */
     public function getRetrieveTrifFxrtInfo($aplyBgnDt, $weekFxrtTpcd)
     {
-        $this->client ??= new Client();
-        $response = $this->client->get(self::ENDPOINT.'/getRetrieveTrifFxrtInfo', [
-            'query' => [
-                'serviceKey' => $this->serviceKey,
-                'aplyBgnDt' => $aplyBgnDt,
-                'weekFxrtTpcd' => $weekFxrtTpcd,
-            ],
+        $queryString = http_build_query([
+            'serviceKey' => $this->serviceKey,
+            'aplyBgnDt' => $aplyBgnDt,
+            'weekFxrtTpcd' => $weekFxrtTpcd,
         ]);
-        $responseBody = (string) $response->getBody();
+
+        $url = self::ENDPOINT.'/getRetrieveTrifFxrtInfo?'.$queryString;
+        
+        $options = [
+            'http' => [
+                'method' => 'GET',
+            ],
+        ];
+
+        $resource = stream_context_create($options);
+
+        $responseBody = file_get_contents($url, false, $resource);
+        if ($responseBody === false) {
+            throw new \RuntimeException('Failed to fetch data from API');
+        }
+
         $xml = simplexml_load_string($responseBody);
 
         $result = [];
