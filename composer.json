@@ -1,6 +1,8 @@
 {
     "name": "minhyung/trif-fxrt",
+    "description": "PHP library for Exchange rates API of Korea Customs Service",
     "type": "library",
+    "keywords": ["fxrt", "exchange rates"],
     "license": "MIT",
     "authors": [
         {
