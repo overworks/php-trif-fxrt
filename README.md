@@ -1,5 +1,32 @@
-# php-trif-fxrt
+## 소개
+`minhyung/trif-fxrt`는 대한민국 관세청의 관세환율정보 Open API(`retrieveTrifFxrtInfo`)를 PHP에서 간편하게 사용할 수 있도록 도와주는 라이브러리입니다.
 
-공공데이터포털에서 제공하는 관세환율정보 API를 사용하기 위한 Composer 패키지
+- **지원 API**: http://apis.data.go.kr/1220000/retrieveTrifFxrtInfo
+- **PHP 버전**: 8.1 이상
+- **라이선스**: MIT
 
-- [API 상세](https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15101230)
+## 설치
+
+```bash
+composer require minhyung/trif-fxrt
+```
+
+## 사용법
+
+```php
+use Minhyung\TrifFxrt\TrifFxrt;
+
+$serviceKey = '발급받은 서비스키';
+$client = new TrifFxrt($serviceKey);
+
+// 환율정보 조회
+$result = $client->getRetrieveTrifFxrtInfo('20240118', 1); // 1: 수출, 2: 수입
+
+if ($result->isSuccessful()) {
+	foreach ($result as $item) {
+		// $item['aplyBgnDt'], $item['cntySgn'], $item['currSgn'], $item['fxrt'], ...
+	}
+} else {
+	echo $result->resultMsg;
+}
+```
