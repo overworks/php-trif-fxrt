@@ -23,6 +23,8 @@ class TrifFxrtTest extends TestCase
     {
         $result = $this->trifFxrt->getRetrieveTrifFxrtInfo('20240118', 1);
         $this->assertTrue($result->isSuccessful());
+        $this->assertEquals('KRW', $result['KRW']->currSgn);
+        $this->assertEquals($result['KRW']['currSgn'], $result['KRW']->currSgn);
 
         $result = $this->trifFxrt->getRetrieveTrifFxrtInfo('20240118', 3);
         $this->assertTrue($result->isFailed());
