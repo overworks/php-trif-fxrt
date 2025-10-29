@@ -3,7 +3,6 @@
 namespace Minhyung\TrifFxrt;
 
 use ArrayAccess;
-use DateTimeImmutable;
 use LogicException;
 
 class TrifFxrtResult implements ArrayAccess
@@ -13,22 +12,16 @@ class TrifFxrtResult implements ArrayAccess
 
     private array $items = [];
 
-    public function __construct(string $xmlString)
+    /**
+     * @param  \SimpleXMLElement  $xml
+     */
+    public function __construct($xml)
     {
-        $xml = simplexml_load_string($xmlString);
         $this->resultCode = (string) $xml->header->resultCode;
         $this->resultMsg = (string) $xml->header->resultMsg;
         if ($xml->body?->items) {
             foreach ($xml->body->items->item as $item) {
-                $this->items[] = [
-                    'aplyBgnDt' =>
-                        DateTimeImmutable::createFromFormat('Ymd', (string) $item->aplyBgnDt),   // 적용개시일자
-                    'cntySgn' => (string) $item->cntySgn,       // 국가부호
-                    'currSgn' => (string) $item->currSgn,       // 통화부호
-                    'fxrt' => (float) $item->fxrt,              // 환율
-                    'imexTp' => (int) $item->imexTp,         // 수출입구분(1:수출, 2:수입)
-                    'mtryUtNm' => (string) $item->mtryUtNm,     // 화폐단위명
-                ];
+                $this->items[] = new TrifFxrtItem($item);
             }
         }
     }
@@ -43,14 +36,42 @@ class TrifFxrtResult implements ArrayAccess
         return $this->resultCode !== '00';
     }
 
+    public function items(): array
+    {
+        return $this->items;
+    }
+
     public function offsetExists(mixed $offset): bool
     {
-        return isset($this->items[$offset]);
+        if (is_int($offset)) {
+            return isset($this->items[$offset]);
+        }
+        if (is_string($offset)) {
+            // array_find는 8.4부터 지원하므로 쓰지 못한다...
+            foreach ($this->items as $item) {
+                if ($item->currSgn === $offset) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        throw new LogicException('Invalid offset type.');
     }
 
     public function offsetGet(mixed $offset): mixed
     {
-        return $this->items[$offset] ?? null;
+        if (is_int($offset)) {
+            return $this->items[$offset] ?? null;
+        }
+        if (is_string($offset)) {
+            foreach ($this->items as $item) {
+                if ($item->currSgn === $offset) {
+                    return $item;
+                }
+            }
+            return null;
+        }
+        throw new LogicException('Invalid offset type.');
     }
 
     public function offsetSet(mixed $offset, mixed $value): void

@@ -11,8 +11,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/minhyung/trif-fxrt/issues",
-        "source": "https://github.com/minhyung/trif-fxrt"
+        "issues": "https://github.com/overworks/php-trif-fxrt/issues",
+        "source": "https://github.com/overworks/php-trif-fxrt"
     },
     "require": {
         "php": "^8.1",

@@ -2,8 +2,6 @@
 
 namespace Minhyung\TrifFxrt;
 
-use DateTimeImmutable;
-
 class TrifFxrt
 {
     const ENDPOINT = 'http://apis.data.go.kr/1220000/retrieveTrifFxrtInfo';
@@ -43,6 +41,11 @@ class TrifFxrt
             throw new \RuntimeException('Failed to fetch data from API');
         }
 
-        return new TrifFxrtResult($responseBody);
+        $xml = simplexml_load_string($responseBody);
+        if ($xml === false) {
+            throw new \RuntimeException('Failed to parse XML response');
+        }
+
+        return new TrifFxrtResult($xml);
     }
 }
