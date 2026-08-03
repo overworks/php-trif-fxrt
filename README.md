@@ -8,7 +8,7 @@
 ## 소개
 `minhyung/trif-fxrt`는 대한민국 관세청의 관세환율정보 Open API(`retrieveTrifFxrtInfo`)를 PHP에서 간편하게 사용할 수 있도록 도와주는 라이브러리입니다。
 
-- **지원 API**: http://apis.data.go.kr/1220000/retrieveTrifFxrtInfo
+- **지원 API**: https://apis.data.go.kr/1220000/retrieveTrifFxrtInfo
 - **PHP 버전**: 8.1 이상
 - **라이선스**: MIT
 

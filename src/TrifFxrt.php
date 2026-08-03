@@ -4,7 +4,7 @@ namespace Minhyung\TrifFxrt;
 
 class TrifFxrt
 {
-    const ENDPOINT = 'http://apis.data.go.kr/1220000/retrieveTrifFxrtInfo';
+    const ENDPOINT = 'https://apis.data.go.kr/1220000/retrieveTrifFxrtInfo';
 
     public function __construct(
         private readonly string $serviceKey
